@@ -16,7 +16,7 @@ T=2;
 settings = sdpsettings('showprogress',1,'savesolverinput',1,'savesolveroutput',1,'dualize',0,'solver','scs','scs.eps',1e-6,'scs.eps_abs',1e-6,'scs.eps_rel', 0, 'scs.max_iters',50000,'dimacs',1);
 
 bin_rep = dec2bin(representative_n4) - '0';
-bin_rep = bin_rep(1:3,:); %Only here to test
+bin_rep = bin_rep(1:3,:); % Selecting a small sample to test.
 
 % Stores the minimum errors reached with two queries for each function.
 EFOs = [];
