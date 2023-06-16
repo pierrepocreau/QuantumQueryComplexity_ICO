@@ -12,7 +12,7 @@ f = boolean([0 0 0 1 0 1 1 0 1 1 1 0 1 0 0 1]); % Loads the function
 
 % Generates the process matrix variable and the constraints for both the FO
 % supermap and the general supermap
-W = gen_variables(dim_H, T, symmetries);
+W = gen_variables(dim_H, T, 0);
 constr_QCFO = constraints(W, T, 2);
 constr_GEN = constraints(W, T, 5);
 
