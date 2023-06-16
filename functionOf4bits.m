@@ -30,9 +30,14 @@ for tt = bin_rep'
     W{1} = sdpvar(dim,dim,'symmetric');
     W{2} = sdpvar(dim,dim,'symmetric');
     
-    % Generate the constraints for fixed order and general supermaps.
-    constr_QCFO = constraints(W, T, 2);
-    constr_GEN = constraints(W, T, 5);
+    % Constraints for the two types of supermaps
+    % Building of the parties and associated dimensions
+    A = {{1, []}, {2, 3}, {4, 5}, {6, []}};
+    d = dim_H * ones(1,2*k);
+    d = [1 d 1];
+
+    constr_QCFO = is_QCFO(W,d, A);
+    constr_GEN = is_valid_superop(W,d, A);
     
     % Generate the constraints that all x must be computed with an error
     % smaller than epsilon.
