@@ -36,7 +36,6 @@ for tt = bin_rep'
     % smaller than epsilon.
     oracles = oracles_map(dim_H, bits, T);
     epsilon = sdpvar(1,1);
-    obj = epsilon;
 
     constr = [];
     for x = dec2bin(0:2^bits-1)' - '0'
@@ -49,10 +48,10 @@ for tt = bin_rep'
     constr_GEN = [constr_GEN, constr];
 
     % Optimisation
-    optout_gen = optimize(constr_GEN, -obj, settings);
+    optout_gen = optimize(constr_GEN, -(1 - epsilon), settings);
     EGen = value(obj);
 
-    optout_fo = optimize(constr_FO, -obj, settings);
+    optout_fo = optimize(constr_FO, -(1 - epsilon), settings);
     EFO = value(obj);
 
     % Storing the results
