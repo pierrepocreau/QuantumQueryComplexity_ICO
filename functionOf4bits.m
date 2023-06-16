@@ -25,8 +25,10 @@ EGens = [];
 for tt = bin_rep'
     func = boolean([0 tt']); % The NPN representatives are specified on truth tables of 15 bits, we have to pad to have 2^4 = 16 bits.
     
-    % Generate the process matrix of correct dimensions
-    W = gen_variables(dim_H, T, 0); % We don't use symmetries.
+    % Generate the process matrix variables
+    dim = dim_H^(2*T);
+    W{1} = sdpvar(dim,dim,'symmetric');
+    W{2} = sdpvar(dim,dim,'symmetric');
     
     % Generate the constraints for fixed order and general supermaps.
     constr_QCFO = constraints(W, T, 2);
