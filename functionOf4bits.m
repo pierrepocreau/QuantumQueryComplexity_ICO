@@ -1,81 +1,62 @@
+% This script makes an exhaustive search (on 4-bit Boolean functions) for an advantage of general
+% supermaps over fixed order ones.
+% 
+% The file "representative_n4.mat" contains the truth tables of all the 222 NPN representatives of 4-bit
+% boolean functions.
+%
+% For each function, we compute the minimum error with which it can be
+% computed using 2 queries, with a fixed order quantum supermap, and with a
+% general supermap.
+
+load('representative_n4.mat');
 bits = 4;
-dim_H = bits + 1; % We don't consider qubits, but more general system. Furthermore, |0...0> will not query the Oracle.
+dim_H = bits + 1; % For 4-bits, the oracle are of dimension 5.
 T=2;
-symmetries=0;
 
-%Pour les and et equality, on arrive bien au bornes montrées par Ambainis
-%dans Optimal one-shot quantum algo...
-
-%Pour and3 bits avec T=2, on a bien le même résultat que Montanaro "On exact quantum
-%query complexity
 settings = sdpsettings('showprogress',1,'savesolverinput',1,'savesolveroutput',1,'dualize',0,'solver','scs','scs.eps',1e-6,'scs.eps_abs',1e-6,'scs.eps_rel', 0, 'scs.max_iters',50000,'dimacs',1);
-%%
-load('representative_n4.mat');
+
 bin_rep = dec2bin(representative_n4) - '0';
-bin_rep = bin_rep(1:3,:);
+bin_rep = bin_rep(1:3,:); %Only here to test
 
-flags = [];
-for id = bin_rep'
-    func = boolean([0 id']); % padding as it gives truth table of 15 bits while we need 16 bits for n=4.
-    flag = 1; %if flag = 1 then function is pair
-    for x = dec2bin(0:2^bits-1)' - '0'
-        im = func(x');
-        im2 = func((1-x)');
-        if im ~= 1-im2
-            flag = 0;
-        end
-    end
-    id
-    flags = [flag, flags];
-end
+% Stores the minimum errors reached with two queries for each function.
+EFOs = [];
+EGens = [];
 
-
-%%
-load('representative_n4.mat');
-bin_rep = dec2bin(representative_n4) - '0';
-bin_rep = bin_rep(199:end,:);
-FO = [];
-GEN = [];
-for id = bin_rep'
-    func = boolean([0 id']); % padding as it gives truth table of 15 bits while we need 16 bits for n=4.
-
-    W = gen_variables(dim_H, T, symmetries);
-
+for tt = bin_rep'
+    func = boolean([0 tt']); % The NPN representatives are specified on truth tables of 15 bits, we have to pad to have 2^4 = 16 bits.
+    
+    % Generate the process matrix of correct dimensions
+    W = gen_variables(dim_H, T, 0); % We don't use symmetries.
+    
+    % Generate the constraints for fixed order and general supermaps.
     constr_QCFO = constraints(W, T, 2);
     constr_GEN = constraints(W, T, 5);
-
-    %Constraint and objective to maximise the probability of sucess for the
-    %worst possible input x.
+    
+    % Generate the constraints that all x must be computed with an error
+    % smaller than epsilon.
     oracles = oracles_map(dim_H, bits, T);
     epsilon = sdpvar(1,1);
     obj = epsilon;
 
-if isa(W{1}, 'replab.CommutantVar')
-    W{1} = W{1}.fullMatrix();
-    W{2} = W{2}.fullMatrix();
-end
     constr = [];
     for x = dec2bin(0:2^bits-1)' - '0'
         im = func(x');
         Ox = oracles(num2str(x'));
-        constr = [constr, trace(W{im+1}*transpose(Ox)) >= epsilon];
+        constr = [constr, trace(W{im+1}*transpose(Ox)) >= 1-epsilon];
     end
+
     constr_FO = [constr_QCFO, constr];
     constr_GEN = [constr_GEN, constr];
 
-    %Optimisation
+    % Optimisation
     optout_gen = optimize(constr_GEN, -obj, settings);
-    gen_primal = value(obj);
-    W_Gen{1} = value(W{1});
-    W_Gen{2} = value(W{2});
+    EGen = value(obj);
 
     optout_fo = optimize(constr_FO, -obj, settings);
-    fo_primal = value(obj);
-    W_FO{1} = value(W{1});
-    W_FO{2} = value(W{2});
+    EFO = value(obj);
 
-    %Results
-    [fo_primal, gen_primal]
-    FO = [FO, fo_primal]
-    GEN = [GEN, gen_primal]
+    % Storing the results
+    [EFO, EGen]
+    EFOs = [EFOs, EFO];
+    EGens = [EGEns, EGen];
 end
