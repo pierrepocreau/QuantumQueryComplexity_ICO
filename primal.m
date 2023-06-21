@@ -27,7 +27,7 @@ constr_GEN = is_valid_superop(W,d, A);
 
 % Generate the constraints that all x must be computed with an error
 % smaller than epsilon.
-oracles = oracles_map(dim_H, bits, T);
+oracles = oracles_map(bits, T);
 epsilon = sdpvar(1,1);
 
 constr = [];

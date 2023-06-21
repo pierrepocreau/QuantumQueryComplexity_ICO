@@ -9,12 +9,11 @@
 % truth table: "0001011011101001" 
 % polynomial representation: x1 + x3x4 + x2x3 + x2x4 + x2x3x4
 bits = 4; % Number of bits of the Boolean function considered
-dim_H = bits + 1; % The oracles takes a register of dimension 5
 T=2;
 symbolic = true; % To avoid numerical imprecision we use the symbolic representation.
 
 func = boolean([0 0 0 1 0 1 1 0 1 1 1 0 1 0 0 1]);
-oracles = oracles_map(dim_H, bits, T);
+oracles = oracles_map(bits, T);
 
 % Loads the solutions obtained from solving the primal and dual sdp
 load("primal_5865.mat")

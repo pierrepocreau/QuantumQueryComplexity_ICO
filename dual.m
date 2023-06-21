@@ -37,7 +37,7 @@ constr_lambda = [sum(lambda{1}) + sum(lambda{2}) <= 1, lambda{1} >= 0, lambda{2}
 
 
 % Generate the constraints linked to the oracles
-oracles = oracles_map(dim_H, bits, T);
+oracles = oracles_map(bits, T);
 
 constr_0 = 0;
 constr_1 = 0;
