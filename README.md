@@ -1,10 +1,13 @@
 # QuantumQueryComplexity_ICO
-Code for the paper "Query Complexity of Boolean Functions under Indefinite Causal Order" by Alastair A. Abbott, Mehdi Mhalla and Pierre Pocreau
+Code for the paper "Query Complexity of Boolean Functions under Indefinite Causal Order" by Alastair A. Abbott, Mehdi Mhalla, and Pierre Pocreau
 
 The Matlab project requires:
 - [CVX](https://github.com/cvxr/CVX): a Matlab package for convex optimizaton. 
 - [QETLab](https://qetlab.com/Main_Page): a Matlab toolbox for exploring quantum entanglement theory.
 - qsuperop: a MATLAB code package for working with quantum superoperators and their causal structure.
 
-The Matlab project is structured as follow:
-
+Scripts of the Matlab project:
+- **functionOf4bits.m**: performs an exhaustive search for a gap between 2-query FO-supermaps and general supermaps, on all 4-bit boolean functions.
+- **primal.m**: computes the minimum bounded error for 2-query FO-supermap and general supermaps on the Boolean function exhibiting the highest separation, that of truth table: 0001011011101001.
+- **dual.m**: dual formulation of the SDP computed in _primal.m_.
+- **truncating.m**: extracts rigorous lower and upper bounds by truncating the solutions obtained from the SDPs of primal.m and dual.m.
