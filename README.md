@@ -1,4 +1,3 @@
-# QuantumQueryComplexity_ICO
 Code for the paper "Query Complexity of Boolean Functions under Indefinite Causal Order" by Alastair A. Abbott, Mehdi Mhalla, and Pierre Pocreau
 
 The Matlab project requires:
