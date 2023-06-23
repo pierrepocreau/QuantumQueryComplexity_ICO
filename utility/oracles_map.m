@@ -1,11 +1,11 @@
 function oracles = oracles_map(n_bits, T)
-% Generate a dictionnary mapping for each bit vector x, its
+% Generate a dictionary mapping for each bit vector x, its
 % corresponding query oracle in its Choi form.
 % The query oracles are tensored T times, corresponding to the number
 % of query allowed for the computation (up to T=3).
 
 oracles = containers.Map;
-inputs = dec2bin(0:2^n_bits-1) - '0'; %Generate all possile inputs
+inputs = dec2bin(0:2^n_bits-1) - '0'; %Generate all possible inputs
 
 for x = inputs'
     Ox = pure_CJ(query_oracle_x(x));

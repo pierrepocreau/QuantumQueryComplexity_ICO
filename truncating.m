@@ -1,5 +1,5 @@
 % Script to extract rigorous lower and upper bounds from the dual and
-% primal solutions of the SDP. We adapt a method developped in:
+% primal solutions of the SDP. We adapt a method developed in:
 % Strict Hierarchy between Parallel, Sequential, and
 % Indefinite-Causal-Order Strategies for Channel Discrimination, Bavaresco,
 % Murao, Quintino.

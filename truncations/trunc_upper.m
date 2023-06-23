@@ -43,7 +43,7 @@ function [S_final,lambdas_trunc] = trunc_upper(S, lambdas, bits, func, T, superm
         S_truncated = sym(S_truncated);
     end
     
-    %The dual should be self adjoint.
+    %The dual should be self-adjoint.
     S_autoAdjoint = (S_truncated + S_truncated') / 2;
 
     %Project onto the dual cone.
@@ -77,7 +77,7 @@ function [S_final,lambdas_trunc] = trunc_upper(S, lambdas, bits, func, T, superm
         operator1 = sym(operator1);
    end
    
-   %We first make S_pos positif
+   %We first make S_pos positive
    if symbolic == true
        S_double = double(S_valid);
        vp_min = min(eig(S_double));
@@ -108,7 +108,7 @@ function [S_final,lambdas_trunc] = trunc_upper(S, lambdas, bits, func, T, superm
    end
    S_final = S_pos + coef * operator1;
 
-   %Check that all the constraint are verified
+   %Check that all the constraints are verified
    [~, flagPos] = chol(S_final);
    [~, flagConstr0] = chol(S_final - operator0);
    [~, flagConstr1] = chol(S_final - operator1);

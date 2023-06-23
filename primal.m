@@ -4,7 +4,7 @@
 % and polynomial representation: x1 + x3x4 + x2x3 + x2x4 + x2x3x4
 
 bits = 4; % Number of bits of the Boolean function considered
-dim_H = bits + 1; % The oracles takes a register of dimension 5
+dim_H = bits + 1; % The oracles take a register of dimension 5
 T=2;
 settings = sdpsettings('showprogress',1,'savesolverinput',1,'savesolveroutput',1,'dualize',0,'solver','scs','scs.eps',1e-6,'scs.eps_abs',1e-6,'scs.eps_rel', 0, 'scs.max_iters',50000,'dimacs',1);
 

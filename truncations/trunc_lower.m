@@ -17,7 +17,7 @@ function W_final = trunc_lower(W, T, supermapClass, symbolic)
     A{T+2}{1} =  2*T+2;
     A{T+2}{2} = [];
     
-    %This rationalization procedure clean the matrix.
+    %This rationalization procedure cleans the matrix.
     [N, D] = rat(W{1});
     W_truncated{1} = N./D;
     [N, D] = rat(W{2});
@@ -29,7 +29,7 @@ function W_final = trunc_lower(W, T, supermapClass, symbolic)
         W_truncated{2} = sym(W_truncated{2});
     end
     
-    %Assure that the process is self adjoint.
+    %Assure that the process is self-adjoint.
     W_autoAdj{1} = (W_truncated{1} + W_truncated{1}') / 2;
     W_autoAdj{2} = (W_truncated{2} + W_truncated{2}') / 2;
 
@@ -47,7 +47,7 @@ function W_final = trunc_lower(W, T, supermapClass, symbolic)
     
     %The matrices must be positive
     %Computing the eigenvalues in symbolic mode takes too much time, so we
-    %computes them in numeric and shift them a little bit.
+    %computes them in numeric and shifts them a little bit.
     if symbolic == true
         W_double{1} = double(W_ok{1});
         W_double{2} = double(W_ok{2});
