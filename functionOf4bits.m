@@ -33,7 +33,7 @@ for tt = bin_rep'
     % Constraints for the two types of supermaps
     % Building of the parties and associated dimensions
     A = {{1, []}, {2, 3}, {4, 5}, {6, []}};
-    d = dim_H * ones(1,2*k);
+    d = dim_H * ones(1,2*T);
     d = [1 d 1];
 
     constr_QCFO = is_QCFO(W,d, A);
@@ -56,13 +56,13 @@ for tt = bin_rep'
 
     % Optimisation
     optout_gen = optimize(constr_GEN, -(1 - epsilon), settings);
-    EGen = value(obj);
+    EGen = value(epsilon);
 
     optout_fo = optimize(constr_FO, -(1 - epsilon), settings);
-    EFO = value(obj);
+    EFO = value(epsilon);
 
     % Storing the results
     [EFO, EGen]
     EFOs = [EFOs, EFO];
-    EGens = [EGEns, EGen];
+    EGens = [EGens, EGen];
 end
