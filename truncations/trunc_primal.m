@@ -1,7 +1,7 @@
-function W_final = trunc_lower(W, T, supermapClass, symbolic)
+function W_final = trunc_primal(W, T, supermapClass, symbolic)
 %Modifies the process W obtained after SDP optimisation so that it 
 %verifies the constraints exactly. It will provide a lower bound of the
-%objectif we aim to maximise.
+%objective (1-epsilon) and therefore an upper bound on epsilon.
 
     dim = size(W{1}, 1);
     dim_H = exp(log(dim)/(2*T));

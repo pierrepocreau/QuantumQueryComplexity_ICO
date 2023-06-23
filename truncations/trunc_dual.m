@@ -1,5 +1,6 @@
-function [S_final,lambdas_trunc] = trunc_upper(S, lambdas, bits, func, T, supermapClass, symbolic)
-% Truncation for the dual upper bound
+function [S_final,lambdas_trunc] = trunc_dual(S, lambdas, bits, func, T, supermapClass, symbolic)
+% Truncation of the dual solution. It gives an upper bound on the objective
+% (1-epsilon) and therefore a lower bound on epsilon.
 
     dim = size(S, 1);
     dim_H = exp(log(dim)/(2*T));

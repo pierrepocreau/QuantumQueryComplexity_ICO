@@ -23,8 +23,8 @@ load("dual_5865.mat")
 % objectif 1-epsilon, so an upper bound on epsilon.
 p_fo = [];
 p_gen = [];
-W_gen_trunc = trunc_lower(W_Gen, T, 5, symbolic);
-W_fo_trunc = trunc_lower(W_FO, T, 2, symbolic);
+W_gen_trunc = trunc_primal(W_Gen, T, 5, symbolic);
+W_fo_trunc = trunc_primal(W_FO, T, 2, symbolic);
 
 % Compute the value of the lower bound.
 for x = dec2bin(0:2^bits-1)' - '0'
@@ -36,8 +36,8 @@ end
 
 % Truncation of the dual solution. It gives an upper bound on the objectif
 % 1-epsilon, so a lower bound on epsilon.
-[W_gen_dual_trunc, lambda_gen_trunc] = trunc_upper(W_gen_dual, lambda_gen, bits, func, T, 5, symbolic);
-[W_fo_dual_trunc, lambda_fo_trunc] = trunc_upper(W_fo_dual, lambda_fo, bits, func, T, 2, symbolic);
+[W_gen_dual_trunc, lambda_gen_trunc] = trunc_dual(W_gen_dual, lambda_gen, bits, func, T, 5, symbolic);
+[W_fo_dual_trunc, lambda_fo_trunc] = trunc_dual(W_fo_dual, lambda_fo, bits, func, T, 2, symbolic);
 
 % Compute the value of the two bounds on epsilon.
 primal_gen = 1-min(p_gen);
