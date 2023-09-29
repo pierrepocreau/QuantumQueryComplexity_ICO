@@ -22,7 +22,7 @@ epsilons_FO = [];
 epsilons_Gen = [];
 
 for tt = bin_rep'
-    func = boolean([0 tt']); % The NPN representatives are specified on truth tables of 15 bits, we have to pad to have 2^4 = 16 bits.
+    func = boolean_function_from_table([0 tt']); % The NPN representatives are specified on truth tables of 15 bits, we have to pad to have 2^4 = 16 bits.
     id = bin2dec(num2str(tt'));
     
     % Generate the process matrix variables
