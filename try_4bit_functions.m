@@ -25,7 +25,7 @@ for tt = bin_rep'
     func = boolean_function_from_table([0 tt']); % The NPN representatives are specified on truth tables of 15 bits, we have to pad to have 2^4 = 16 bits.
     id = bin2dec(num2str(tt'));
     
-    % Generate the process matrix variables
+    % Generate the process matrix variables. Can assume this is real since the oracles are real.
     dim = dim_H^(2*T);
     W{1} = sdpvar(dim,dim,'symmetric');
     W{2} = sdpvar(dim,dim,'symmetric');
