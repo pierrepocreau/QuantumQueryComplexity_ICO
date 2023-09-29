@@ -8,7 +8,7 @@ dim_H = bits + 1; % The oracles take a register of dimension 5
 T=2;
 settings = sdpsettings('showprogress',1,'savesolverinput',1,'savesolveroutput',1,'dualize',0,'solver','scs','scs.eps',1e-6,'scs.eps_abs',1e-6,'scs.eps_rel', 0, 'scs.max_iters',50000,'dimacs',1);
 
-f = boolean([0 0 0 1 0 1 1 0 1 1 1 0 1 0 0 1]); % Loads the function
+f = boolean_function_from_table([0 0 0 1 0 1 1 0 1 1 1 0 1 0 0 1]); % Loads the function
 
 % Generates the process matrix variable and the constraints for both the FO
 % supermap and the general supermap
