@@ -20,32 +20,32 @@ function W_final = extract_primal(W, T, supermapClass, symbolic)
     
     % Rationalise each element of the superinstrument W
     [N, D] = rat(W{1});
-    W_truncated{1} = N./D;
+    W_frac{1} = N./D;
     [N, D] = rat(W{2});
-    W_truncated{2} = N./D;
+    W_frac{2} = N./D;
     
     % Use a symbolic representation
     if symbolic == true
-        W_truncated{1} = sym(W_truncated{1});
-        W_truncated{2} = sym(W_truncated{2});
+        W_frac{1} = sym(W_frac{1});
+        W_frac{2} = sym(W_frac{2});
     end
     
-    % Ensure that the superinstrument elements are self-adjoints
-    W_autoAdj{1} = (W_truncated{1} + W_truncated{1}') / 2;
-    W_autoAdj{2} = (W_truncated{2} + W_truncated{2}') / 2;
+    % Ensure that the superinstrument elements are Hermitian
+    W_Herm{1} = (W_frac{1} + W_frac{1}') / 2;
+    W_Herm{2} = (W_frac{2} + W_frac{2}') / 2;
 
     % Project W onto the space of valid QCFO or general supermaps
     switch supermapClass
     case 2 % QC-FO
-        W_valid = project_onto_QCFOs(W_autoAdj{1} + W_autoAdj{2}, d, A);
+        W_proj = project_onto_QCFOs(W_Herm{1} + W_Herm{2}, d, A);
     otherwise % General supermaps
-        W_valid = project_onto_valid_superops(W_autoAdj{1} + W_autoAdj{2}, d, A);
+        W_proj = project_onto_valid_superops(W_Herm{1} + W_Herm{2}, d, A);
     end
     
     % Ensure that W is in the valid space of supermaps by removing the orthogonal part 
-    W_rest = W_valid - W_autoAdj{1} - W_autoAdj{2};
-    W_ok{1} = W_autoAdj{1} + W_rest / 2;
-    W_ok{2} = W_autoAdj{2} + W_rest / 2;
+    W_corr = W_proj - W_Herm{1} - W_Herm{2};
+    W_valid{1} = W_Herm{1} + W_corr / 2;
+    W_valid{2} = W_Herm{2} + W_corr / 2;
     
     % Ensure that the superinstrument elements are positive semi-definite
     % by mixing them with the identity.
@@ -54,24 +54,24 @@ function W_final = extract_primal(W, T, supermapClass, symbolic)
     % Here we compute the eigenvalue numerically and shift them by a small
     % constant.
     if symbolic == true
-        W_double{1} = double(W_ok{1});
-        W_double{2} = double(W_ok{2});
+        W_double{1} = double(W_valid{1});
+        W_double{2} = double(W_valid{2});
         vp_min = min(min(eig(W_double{1})), min(eig(W_double{2})));
         eps = vp_min/(vp_min - 1) + 10^-8;
     else
-        vp_min = min(min(eig(W_ok{1})), min(eig(W_ok{2})));
+        vp_min = min(min(eig(W_valid{1})), min(eig(W_valid{2})));
         eps = vp_min/(vp_min - 1) + 10^-8;
     end
 
     if eps > 0
-        W_ok{1} = (1-eps)*W_ok{1} + eps*eye(dim);
-        W_ok{2} = (1-eps)*W_ok{2} + eps*eye(dim);
+        W_pos{1} = (1-eps)*W_valid{1} + eps*eye(dim);
+        W_pos{2} = (1-eps)*W_valid{2} + eps*eye(dim);
     end
 
     % Renormalise the process matrix
-    norm = trace(W_ok{1} + W_ok{2});
-    W_final{1} = dim_H^T/norm * W_ok{1};
-    W_final{2} = dim_H^T/norm * W_ok{2};
+    norm = trace(W_pos{1} + W_pos{2});
+    W_final{1} = dim_H^T/norm * W_pos{1};
+    W_final{2} = dim_H^T/norm * W_pos{2};
 
     % Check that all the constraints are verified
     [~, flag1] = chol(W_final{1});
