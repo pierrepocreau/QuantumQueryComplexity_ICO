@@ -16,7 +16,7 @@ function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapC
     
     % Verify all lambdas are non-negative
     for i = 1:2
-        lambdas{i} = max(lambdas{i},zeros(1,length(lambdas{i})));
+        lambdas{i} = max(lambdas{i},zeros(length(lambdas{i}),1));
     end
 
     % Rationalise the lambdas
@@ -37,33 +37,30 @@ function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapC
     delta = 1 - sum(lambdas_frac{1}) - sum(lambdas_frac{2});
     if delta < 0
         % Determine how many lambdas we can adjust while keeping them positive.
-        all_lambdas = sort([lambdas{1}, lambdas{2}],'descend');
+        all_lambdas = sort([lambdas{1}; lambdas{2}],'descend');
         N = 2^n;
         while all_lambdas(N) < -delta/N
             N = N - 1;
         end
 
         % Adjust those lambdas
-        for x = 1:length(lambdas_frac{1})
-            lambdas1 = lambdas_frac{1};
-            lambdas_final1 = zeros(1,length(lambdas1));
+        lambdas1 = lambdas_frac{1};
+        lambdas_final1 = lambdas1;
+        for x = 1:length(lambdas1)
             if lambdas1(x) >= -delta/N
                 lambdas_final1(x) = lambdas1(x) + delta/N;
-            else
-                lambdas_final1(x) = lambdas1(x);
             end
-            lambdas_final{1} = lambdas_final1;
         end
-        for x = 1:length(lambdas_frac{2})
-            lambdas2 = lambdas_frac{2};
-            lambdas_final2 = zeros(1,length(lambdas2));
+        lambdas_final{1} = lambdas_final1;
+
+        lambdas2 = lambdas_frac{2};
+        lambdas_final2 = lambdas2;
+        for x = 1:length(lambdas2)
             if lambdas2(x) >= -delta/N
                 lambdas_final2(x) = lambdas2(x) + delta/N;
-            else
-                lambdas_final2(x) = lambdas2(x);
             end
-            lambdas_final{2} = lambdas_final2;
         end
+        lambdas_final{2} = lambdas_final2;
     else
         lambdas_final = lambdas_frac;
     end
