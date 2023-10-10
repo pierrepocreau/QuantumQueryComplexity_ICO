@@ -39,23 +39,23 @@ constr_lambda = [sum(lambda{1}) + sum(lambda{2}) <= 1, lambda{1} >= 0, lambda{2}
 % Generate the constraints linked to the oracles
 oracles = oracles_map(bits, T);
 
-constr_0 = 0;
-constr_1 = 0;
-c0 = 1;
-c1 = 1;
+operator0 = 0;
+operator1 = 0;
+num0s = 1;
+num1s = 1;
 for x = dec2bin(0:2^bits-1)' - '0'
     im = f(x');
     Ox = oracles(num2str(x'));
     if im == 0
-        constr_0 = constr_0 + lambda{im+1}(c0) * Ox;
-        c0 = c0 + 1;
+        operator0 = operator0 + lambda{im+1}(num0s) * Ox;
+        num0s = num0s + 1;
     else
-        constr_1 = constr_1 + lambda{im+1}(c1) * Ox; 
-        c1 = c1 + 1;
+        operator1 = operator1 + lambda{im+1}(num1s) * Ox; 
+        num1s = num1s + 1;
     end
 end
-constr0 =  W - constr_0 >= 0;
-constr1 =  W - constr_1 >= 0;
+constr0 =  W - operator0 >= 0;
+constr1 =  W - operator1 >= 0;
 
 constr_GEN_dual = [constr_GEN_dual, constr_lambda, constr1, constr0];
 constr_QCFO_dual = [constr_QCFO_dual, constr_lambda, constr1, constr0];
