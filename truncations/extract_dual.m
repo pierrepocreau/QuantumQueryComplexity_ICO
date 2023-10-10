@@ -84,17 +84,6 @@ function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapC
             S_valid = project_onto_dual_valid_superops(S_Herm, d, spaces);
     end
     
-    % Make sure S is positive semidefinite
-    if symbolic == true
-       S_double = double(S_valid);
-       eig_min = min(eig(S_double));
-       mu = eig_min/(eig_min - 1) + 10^-8; % add some extra cusion to ensure strict positivity given numeric eig_min
-    else
-       eig_min = min(eig(S_valid));
-       mu = eig_min/(eig_min - 1) + 10^-8;
-    end
-    S_pos = (1-mu)*S_valid + mu*eye(size(S_valid));
-    
     % Compute the expressions of the operator0 and operator1 (O^{[0]} and O^{[1}}) in the paper
     oracles = oracles_map(dim_H, n, T);
     operator0 = 0;
