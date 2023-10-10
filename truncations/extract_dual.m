@@ -1,8 +1,8 @@
 function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapClass, symbolic)
 % Extract an exact dual solution from a numerical approximation. 
 % This function gives an upper bound on the objective (1-epsilon) and therefore a lower bound on epsilon.
-% It follows Algorithm 1 as described in the paper 
-% "Quantum Query Complexity of Boolean Functions under Indefinite Causal Order".
+% It follows Algorithm 1 as described in the paper:
+% A. A. Abbott, M. Mhalla, P. Pocreau, "Quantum Query Complexity of Boolean Functions under Indefinite Causal Order", arXiv:2307.10285 
 
     dim_H = n+1;
     
