@@ -43,7 +43,7 @@ function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapC
             N = N - 1;
         end
 
-        % Adjust those lambdas
+        % Adjust the lambdas
         lambdas1 = lambdas_frac{1};
         lambdas_final1 = lambdas1;
         for x = 1:length(lambdas1)
@@ -110,30 +110,27 @@ function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapC
     % Make sure that the conditions S - operator0 >= 0 and S - operator1 >= 0 are respected. 
     step = 2*10^-5;
     
-    dS_pos = double(S_pos);
+    dS_valid = double(S_valid);
     eta0 = 0;
-    while min(eig(dS_pos - operator0)) < 0
-       dS_pos = dS_pos + step*operator0;
+    while min(eig(dS_valid - operator0)) < 0
+       dS_valid = dS_valid + step*operator0;
        eta0 = eta0 + step;
     end
-    S_pos = S_pos + eta0*perator0;
-    
-    dS_pos = double(S_pos);
+
     eta1 = 0;
-    while min(eig(dS_pos - operator1)) < 0
-       dS_pos = dS_pos + step*operator1;
+    while min(eig(dS_valid - operator1)) < 0
+       dS_valid = dS_valid + step*operator1;
        eta1 = eta1 + step;
     end
-    S_final = S_pos + eta1*operator1;
+    S_final = S_valid + eto0*operator0 + eta1*operator1;
     
     % Check that all the constraints are verified
-    [~, flagPos] = chol(S_final);
     [~, flagConstr0] = chol(S_final - operator0);
     [~, flagConstr1] = chol(S_final - operator1);
-    assert(flagPos == 0);
     assert(flagConstr0 == 0);
     assert(flagConstr1 == 0);    
     assert(sum(lambdas_final{1}) + sum(lambdas_final{2}) -1 <= 0) % lambdas sum to 1
+    assert(all([lambdas_final{1}; lambdas_final{2}] >= 0)); % All lambdas non-negative
     switch supermapClass
         case 2 % FO-supermaps
             assert(0 == max(max(abs(S_final - project_onto_dual_QCFO_superops(S_final, d, spaces)))))
