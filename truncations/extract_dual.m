@@ -14,6 +14,11 @@ function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapC
     end
     spaces{T+2}{1} =  []; % trivial F
     
+    % Verify all lambdas are non-negative
+    for i = 1:2
+        lambdas{i} = max(lambdas{i},zeros(1,length(lambdas{i})));
+    end
+
     % Rationalise the lambdas
     lambdas_frac = cell(1,2);
     [N, D] = rat(lambdas{1});
