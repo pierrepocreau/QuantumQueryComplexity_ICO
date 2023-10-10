@@ -10,3 +10,5 @@ Scripts of the Matlab project:
 - **primal.m**: computes the minimum bounded error for 2-query FO-supermap and general supermaps on the Boolean function exhibiting the highest separation, that of truth table: 0001011011101001.
 - **dual.m**: dual formulation of the SDP computed in _primal.m_.
 - **truncating.m**: extracts rigorous lower and upper bounds by truncating the solutions obtained from the SDPs of primal.m and dual.m.
+
+The folders data, truncations and utility should be added to the Matlab path for the code to function.
