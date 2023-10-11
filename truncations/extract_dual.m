@@ -85,7 +85,7 @@ function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapC
     end
     
     % Compute the expressions of the operator0 and operator1 (O^{[0]} and O^{[1}}) in the paper
-    oracles = oracles_map(dim_H, n, T);
+    oracles = oracles_map(n, T);
     operator0 = 0;
     operator1 = 0;
     num0s = 0;

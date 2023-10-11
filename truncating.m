@@ -11,7 +11,7 @@
 n = 4; % Number of input bits of the Boolean function considered
 T = 2; % Number of queries
 symbolic = true; % To avoid numerical imprecision we use symbolic representation.
-func = boolean([0 0 0 1 0 1 1 0 1 1 1 0 1 0 0 1]); % Truth table for this function
+func = boolean_function_from_table([0 0 0 1 0 1 1 0 1 1 1 0 1 0 0 1]); % Truth table for this function
 oracles = oracles_map(n, T); % Get all the query oracles Ox for each bit string x
 
 % Loads the numerical solutions obtained from solving the primal and dual SDPs
