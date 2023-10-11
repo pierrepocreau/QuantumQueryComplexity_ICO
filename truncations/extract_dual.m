@@ -110,8 +110,8 @@ function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapC
     else
         lambda_min = min(eig(S_valid));
     end
-    eps = lambda_min/(lambda_min-1) + 10^-9;
-    S_pos = (1-eps)*S_valid + eps*eye(dim);
+    mu = lambda_min/(lambda_min-1) + 10^-9;
+    S_pos = (1-mu)*S_valid + mu*eye(dim);
 
     % Make sure that the conditions S - operator0 >= 0 and S - operator1 >= 0 are respected. 
     step = 1*10^-5;
@@ -127,12 +127,12 @@ function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapC
     end
     
     eta0 = 0;
-    while min(eig(S_valid + (eta0-1)*operator0)) < 0
+    while min(eig(S_pos + (eta0-1)*operator0)) < 0
        eta0 = eta0 + step;
     end
 
     eta1 = 0;
-    while min(eig(S_valid + (eta1-1)*operator1)) < 0
+    while min(eig(S_pos + (eta1-1)*operator1)) < 0
        eta1 = eta1 + step;
     end
 
