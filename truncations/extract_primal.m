@@ -1,22 +1,23 @@
-function W_final = extract_primal(W, T, supermapClass, symbolic)
+function W_final = extract_primal(W, T, n, supermapClass, symbolic)
 % Extract an exact primal solution from a numerical approximation. 
 % This function gives a lower bound on the objective (1-epsilon) and therefore an upper bound on epsilon.
 % It follows Algorithm 2 as described in the paper:
 % A. A. Abbott, M. Mhalla, P. Pocreau, "Quantum Query Complexity of Boolean Functions under Indefinite Causal Order", arXiv:2307.10285 
 
-    dim = size(W{1}, 1);
-    dim_H = exp(log(dim)/(2*T));
+    dim_H = n+1;
 
     d = dim_H * ones(1,2*T);
     d = [1 d 1];
-    A{1}{1} = 1;
-    A{1}{2} = []; % trivial P
+    dim = prod(d);
+
+    spaces{1}{1} = [];    
+    spaces{1}{1} = 1;
     for i = 1:T
-        A{i+1}{1} = 2*i;
-        A{i+1}{2} = 2*i + 1;
+        spaces{i+1}{1} = 2*i;
+        spaces{i+1}{2} = 2*i + 1;
     end
-    A{T+2}{1} =  2*T+2;
-    A{T+2}{2} = [];
+    spaces{T+2}{1} =  2*T+2;
+    spaces{T+2}{2} = [];
     
     % Rationalise each element of the superinstrument W
     [N, D] = rat(W{1});
@@ -37,9 +38,9 @@ function W_final = extract_primal(W, T, supermapClass, symbolic)
     % Project W onto the space of valid QCFO or general supermaps
     switch supermapClass
     case 2 % QC-FO
-        W_proj = project_onto_QCFOs(W_Herm{1} + W_Herm{2}, d, A);
+        W_proj = project_onto_QCFOs(W_Herm{1} + W_Herm{2}, d, spaces);
     otherwise % General supermaps
-        W_proj = project_onto_valid_superops(W_Herm{1} + W_Herm{2}, d, A);
+        W_proj = project_onto_valid_superops(W_Herm{1} + W_Herm{2}, d, spaces);
     end
     
     % Ensure that W is in the valid space of supermaps by removing the orthogonal part 
@@ -74,15 +75,15 @@ function W_final = extract_primal(W, T, supermapClass, symbolic)
     W_final{2} = dim_H^T/norm * W_pos{2};
 
     % Check that all the constraints are verified
-    [~, flag1] = chol(W_final{1});
-    [~, flag2] = chol(W_final{2});
-    assert(flag1==0);
-    assert(flag2==0);    
+    [~, flagPositivity1] = chol(W_final{1});
+    [~, flagPositivity2] = chol(W_final{2});
+    assert(flagPositivity1==0);
+    assert(flagPositivity2==0);    
     switch supermapClass
         case 2 % QC-FO
-            assert(0 == max(max(abs(W_final{1} + W_final{2} - project_onto_QCFOs(W_final{1} + W_final{2}, d, A)))));
+            assert(0 == max(max(abs(W_final{1} + W_final{2} - project_onto_QCFOs(W_final{1} + W_final{2}, d, spaces)))));
         otherwise % General supermaps
-            assert(0 ==  max(max(abs(W_final{1} + W_final{2} - project_onto_valid_superops(W_final{1} + W_final{2}, d, A)))));
+            assert(0 ==  max(max(abs(W_final{1} + W_final{2} - project_onto_valid_superops(W_final{1} + W_final{2}, d, spaces)))));
     end
 
 end
