@@ -137,11 +137,11 @@ function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapC
     end
 
     if symbolic == true
-        S_final = S_pos_sym + sym(eto0)*operator0_sym + sym(eta1)*operator1_sym;
+        S_final = S_pos_sym + eta0*operator0_sym + eta1*operator1_sym;
         operator0 = operator0_sym;
         operator1 = operator1_sym;
     else
-        S_final = S_pos + eto0*operator0 + eta1*operator1;
+        S_final = S_pos + eta0*operator0 + eta1*operator1;
     end
     
     % Check that all the constraints are verified
@@ -149,7 +149,7 @@ function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapC
     [~, flagConstr1] = chol(S_final - operator1);
     assert(flagConstr0 == 0);
     assert(flagConstr1 == 0);    
-    assert(sum(lambdas_final{1}) + sum(lambdas_final{2}) -1 <= 0) % lambdas sum to 1
+    assert(sum(lambdas_final{1}) + sum(lambdas_final{2}) -1 <= 0); % lambdas sum to 1
     assert(all([lambdas_final{1}; lambdas_final{2}] >= 0)); % All lambdas non-negative
     switch supermapClass
         case 2 % FO-supermaps
