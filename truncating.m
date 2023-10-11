@@ -36,7 +36,7 @@ end
 % Truncation of the dual solution for general supermaps and FO-supermaps. 
 % It gives an upper bound on the objective function 1-epsilon, and hence a lower bound on epsilon.
 [W_gen_dual_trunc, lambda_gen_trunc] = extract_dual(W_gen_dual, lambda_gen, n, func, T, 5, symbolic); % Supermap class 5 is general supermaps
-[W_fo_dual_trunc, lambda_fo_trunc] = trunc_dual(W_fo_dual, lambda_fo, n, func, T, 2, symbolic); % Supermap class 2 is FO-supermaps
+[W_fo_dual_trunc, lambda_fo_trunc] = extract_dual(W_fo_dual, lambda_fo, n, func, T, 2, symbolic); % Supermap class 2 is FO-supermaps
 
 % Compute the values of the two bounds on epsilon.
 primal_gen = 1-min(p_gen);

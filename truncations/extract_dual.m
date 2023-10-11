@@ -7,6 +7,7 @@ function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapC
     dim_H = n+1;
     
     d = dim_H * ones(1,2*T);
+    dim = prod(d);
     spaces{1}{1} = []; % trivial P
     for i = 1:T
         spaces{i+1}{1} = 2*i - 1;
@@ -102,27 +103,46 @@ function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapC
         end
     end
     
+    % First we make sure S >= 0 (this ensures the convergence of the following steps)
     if symbolic == true
-        operator0 = sym(operator0);
-        operator1 = sym(operator1);
+        S_valid_double = double(S_valid);
+        lambda_min = min(eig(S_valid_double));
+    else
+        lambda_min = min(eig(S_valid));
+    end
+    eps = lambda_min/(lambda_min-1) + 10^-9;
+    S_pos = (1-eps)*S_valid + eps*eye(dim);
+
+    % Make sure that the conditions S - operator0 >= 0 and S - operator1 >= 0 are respected. 
+    step = 1*10^-5;
+
+    if symbolic == true
+        % Save the symbolic version of S, operatorX, then work numerically for now
+        S_pos_sym = S_pos;
+        S_pos = double(S_pos);
+        operator0_sym = operator0;
+        operator0 = double(operator0);
+        operator1_sym = operator1;
+        operator1 = double(operator1);
     end
     
-    % Make sure that the conditions S - operator0 >= 0 and S - operator1 >= 0 are respected. 
-    step = 2*10^-5;
-    
-    dS_valid = double(S_valid);
     eta0 = 0;
-    while min(eig(dS_valid - operator0)) < 0
-       dS_valid = dS_valid + step*operator0;
+    while min(eig(S_valid + (eta0-1)*operator0)) < 0
        eta0 = eta0 + step;
     end
 
     eta1 = 0;
-    while min(eig(dS_valid - operator1)) < 0
-       dS_valid = dS_valid + step*operator1;
+    while min(eig(S_valid + (eta1-1)*operator1)) < 0
        eta1 = eta1 + step;
     end
-    S_final = S_valid + eto0*operator0 + eta1*operator1;
+
+    if symbolic == true
+        S_final = S_pos_sym + sym(eto0)*operator0_sym + sym(eta1)*operator1_sym;
+        operator0 = operator0_sym;
+        operator1 = operator1_sym;
+    else
+        S_final = S_pos + eto0*operator0 + eta1*operator1;
+    end
     
     % Check that all the constraints are verified
     [~, flagConstr0] = chol(S_final - operator0);
