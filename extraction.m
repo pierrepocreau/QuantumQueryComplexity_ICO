@@ -13,7 +13,7 @@ T = 2; % Number of queries
 dim_H = n + 1;
 dO = dim_H^T; % Norm of the process matrices
 
-symbolic = false; % To avoid numerical imprecision we use symbolic representation.
+symbolic = true; % To avoid numerical imprecision we use symbolic representation.
 func = boolean_function_from_table([0 0 0 1 0 1 1 0 1 1 1 0 1 0 0 1]); % Truth table for this function
 oracles = oracles_map(n, T); % Get all the query oracles Ox for each bit string x
 
