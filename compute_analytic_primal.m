@@ -10,20 +10,18 @@ settings = sdpsettings('showprogress',1,'savesolverinput',1,'savesolveroutput',1
 
 f = boolean_function_from_table([0 0 0 1 0 1 1 0 1 1 1 0 1 0 0 1]); % Loads the function
 
-% Generates the process matrix variable and the constraints for both the FO
-% supermap and the general supermap
-dim = dim_H^(2*T);
+% Variables for the two types of supermaps and their constraints
+% Building of the parties and associated dimensions
+spaces = {{1, []}, {2, 3}, {4, 5}, {6, []}};
+d = dim_H * ones(1,2*T);
+d = [1 d 1]; % Trivial input and output spaces    
+dim = prod(d);
+
 W{1} = sdpvar(dim,dim,'symmetric');
 W{2} = sdpvar(dim,dim,'symmetric');
 
-% Constraints for the two types of supermaps
-% Building of the parties and associated dimensions
-A = {{1, []}, {2, 3}, {4, 5}, {6, []}};
-d = dim_H * ones(1,2*T);
-d = [1 d 1];    
-
-constr_QCFO = is_QCFO(W,d, A);
-constr_GEN = is_valid_superop(W,d, A);
+constr_QCFO = is_QCFO(W,d, spaces);
+constr_GEN = is_valid_superop(W,d, spaces);
 
 % Generate the constraints that all x must be computed with an error
 % smaller than epsilon.
