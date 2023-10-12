@@ -11,4 +11,4 @@ Scripts of the Matlab project:
 - **compute_analytic_dual.m**: dual formulation of the SDP computed in _compute_analytic_primal.m_.
 - **extraction.m**: extracts rigorous lower and upper bounds by rationalising the solutions obtained from the SDPs of primal.m and dual.m.
 
-The folders data, extractions and utility should be added to the Matlab path for the code to function.
+The folders data, extraction and utility should be added to the Matlab path for the code to function.
