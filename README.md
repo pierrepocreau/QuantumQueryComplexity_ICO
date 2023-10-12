@@ -8,7 +8,7 @@ The Matlab project requires:
 Scripts of the Matlab project:
 - **try_4bit_functions.m**: performs an exhaustive search for a gap between 2-query FO-supermaps and general supermaps, on all 4-bit boolean functions.
 - **compute_analytic_primal.m**: computes the minimum bounded error for 2-query FO-supermap and general supermaps on the Boolean function exhibiting the highest separation, that of truth table: 0001011011101001.
-- **compute_analyti_dual.m**: dual formulation of the SDP computed in _compute_analytic_primal.m_.
+- **compute_analytic_dual.m**: dual formulation of the SDP computed in _compute_analytic_primal.m_.
 - **extraction.m**: extracts rigorous lower and upper bounds by rationalising the solutions obtained from the SDPs of primal.m and dual.m.
 
 The folders data, extractions and utility should be added to the Matlab path for the code to function.
