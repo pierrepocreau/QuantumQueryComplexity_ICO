@@ -10,31 +10,28 @@ settings = sdpsettings('showprogress',1,'savesolverinput',1,'savesolveroutput',1
 
 f = boolean_function_from_table([0 0 0 1 0 1 1 0 1 1 1 0 1 0 0 1]); % Loads the function
 
-% Generate the dual variables
-dim = dim_H^(2*T);
+% Generate the dual variables and their constraints
+d = dim_H * ones(1,2*T);
+d = [1 d 1];
+dim = prod(d);
+
 W = sdpvar(dim,dim,'symmetric');
 lambda{1} = sdpvar(8,1);
 lambda{2} = sdpvar(8,1);
 
-% Generate the dual cone contraints and the constraints on the lambdas.
-dim = size(W,1);
-dim_H = exp(log(dim)/(2*T));
-
-d = dim_H * ones(1,2*T);
-d = [1 d 1];
-A{1}{1} = 1;
-A{1}{2} = [];
+spaces{1}{1} = 1;
+spaces{1}{2} = [];
 for i = 1:T
-    A{i+1}{1} = 2*i;
-    A{i+1}{2} = 2*i + 1;
+    spaces{i+1}{1} = 2*i;
+    spaces{i+1}{2} = 2*i + 1;
 end
-A{T+2}{1} =  2*T+2;
-A{T+2}{2} = [];
+spaces{T+2}{1} =  2*T+2;
+spaces{T+2}{2} = [];
 
-constr_QCFO_dual = in_QCFO_dual_cone(W, d, A);
-constr_GEN_dual = in_valid_dual_cone(W, d, A); 
+constr_QCFO_dual = in_QCFO_dual_cone(W, d, spaces);
+constr_GEN_dual = in_valid_dual_cone(W, d, spaces); 
+
 constr_lambda = [sum(lambda{1}) + sum(lambda{2}) <= 1, lambda{1} >= 0, lambda{2} >= 0];
-
 
 % Generate the constraints linked to the oracles
 oracles = oracles_map(bits, T);
