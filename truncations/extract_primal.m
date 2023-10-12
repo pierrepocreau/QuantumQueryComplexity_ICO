@@ -7,7 +7,7 @@ function W_final = extract_primal(W, T, n, supermapClass, symbolic)
     dim_H = n+1;
 
     d = dim_H * ones(1,2*T);
-    d = [1 d 1];
+    d = [1 d 1]; % Trivial input and output spaces
     dim = prod(d);
 
     spaces{1}{1} = [];    
@@ -58,15 +58,15 @@ function W_final = extract_primal(W, T, n, supermapClass, symbolic)
         W_double{1} = double(W_valid{1});
         W_double{2} = double(W_valid{2});
         vp_min = min(min(eig(W_double{1})), min(eig(W_double{2})));
-        eps = vp_min/(vp_min - 1) + 10^-8;
+        mu = vp_min/(vp_min - 1) + 10^-8;
     else
         vp_min = min(min(eig(W_valid{1})), min(eig(W_valid{2})));
-        eps = vp_min/(vp_min - 1) + 10^-8;
+        mu = vp_min/(vp_min - 1) + 10^-8;
     end
 
-    if eps > 0
-        W_pos{1} = (1-eps)*W_valid{1} + eps*eye(dim);
-        W_pos{2} = (1-eps)*W_valid{2} + eps*eye(dim);
+    if mu > 0
+        W_pos{1} = (1-mu)*W_valid{1} + mu*eye(dim);
+        W_pos{2} = (1-mu)*W_valid{2} + mu*eye(dim);
     end
 
     % Renormalise the process matrix
