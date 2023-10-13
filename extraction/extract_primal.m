@@ -37,10 +37,10 @@ function W_final = extract_primal(W, T, n, supermapClass, symbolic)
 
     % Project W onto the space of valid QCFO or general supermaps
     switch supermapClass
-    case 2 % QC-FO
-        W_proj = project_onto_QCFOs(W_Herm{1} + W_Herm{2}, d, spaces);
-    otherwise % General supermaps
-        W_proj = project_onto_valid_superops(W_Herm{1} + W_Herm{2}, d, spaces);
+        case 2 % QC-FO
+            W_proj = project_onto_QCFOs(W_Herm{1} + W_Herm{2}, d, spaces);
+        otherwise % General supermaps
+            W_proj = project_onto_valid_superops(W_Herm{1} + W_Herm{2}, d, spaces);
     end
     
     % Ensure that W is in the valid space of supermaps by removing the orthogonal part 
@@ -51,18 +51,16 @@ function W_final = extract_primal(W, T, n, supermapClass, symbolic)
     % Ensure that the superinstrument elements are positive semi-definite
     % by mixing them with the identity.
     % This step can be performed analytically, however computing the
-    % eigenvalues in symbolic mode can be computationally inefficient.
-    % Here we compute the eigenvalue numerically and shift them by a small
-    % constant.
+    % eigenvalues in symbolic mode is computationally inefficient.
+    % Here we compute the eigenvalue numerically and shift them by a small constant.
     if symbolic == true
         W_double{1} = double(W_valid{1});
         W_double{2} = double(W_valid{2});
-        vp_min = min(min(eig(W_double{1})), min(eig(W_double{2})));
-        mu = vp_min/(vp_min - 1) + 10^-8;
+        lambda_min = min(min(eig(W_double{1})), min(eig(W_double{2})));
     else
-        vp_min = min(min(eig(W_valid{1})), min(eig(W_valid{2})));
-        mu = vp_min/(vp_min - 1) + 10^-8;
+        lambda_min = min(min(eig(W_valid{1})), min(eig(W_valid{2})));
     end
+    mu = lambda_min/(lambda_min - 1) + 10^-8;
 
     if mu > 0
         W_pos{1} = (1-mu)*W_valid{1} + mu*eye(dim);
