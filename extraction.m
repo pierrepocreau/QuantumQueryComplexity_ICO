@@ -25,17 +25,17 @@ load("dual_5865.mat")
 
 % Extraction of exact solutions of the primal for general supermaps and FO-supermaps. 
 % This gives a lower bound on the objective function 1-epsilon, and hence an upper bound on epsilon.
-p_fo = [];
-p_gen = [];
-W_gen_primal_extract = extract_primal(W_Gen, T, n, 5, symbolic); % Supermap class 5 is general supermaps
-W_fo_primal_extract = extract_primal(W_FO, T, n, 2, symbolic); % Supermap class 2 is FO-supermaps
+p_succ_fo = [];
+p_succ_gen = [];
+W_primal_extracted_gen = extract_primal(W_Gen, T, n, 5, symbolic); % Supermap class 5 is general supermaps
+W_primal_extracted_fo = extract_primal(W_FO, T, n, 2, symbolic); % Supermap class 2 is FO-supermaps
 
 % Compute the analytic value of the lower bound.
 for x = dec2bin(0:2^n-1)' - '0'
     im = func(x');
     Ox = oracles(num2str(x'));
-    p_fo = [p_fo, trace(W_fo_primal_extract{im+1}*transpose(Ox))];
-    p_gen = [p_gen, trace(W_gen_primal_extract{im+1}*transpose(Ox))];
+    p_succ_fo = [p_succ_fo, trace(W_primal_extracted_fo{im+1}*transpose(Ox))];
+    p_succ_gen = [p_succ_gen, trace(W_primal_extracted_gen{im+1}*transpose(Ox))];
 end
 
 % Extraction of exact solution of the dual for general supermaps and FO-supermaps. 
@@ -44,11 +44,11 @@ end
 [W_fo_dual_extract, lambda_fo_extract] = extract_dual(W_fo_dual, lambda_fo, n, func, T, 2, symbolic); % Supermap class 2 is FO-supermaps
 
 % Compute the values of the two bounds on epsilon.
-primal_gen = 1-min(p_gen);
-dual_gen = - (trace(W_gen_dual_extract)/dO - sum(lambda_gen_extract{1}) - sum(lambda_gen_extract{2}));
+eps_primal_gen = 1-min(p_succ_gen);
+eps_dual_gen = - (trace(W_gen_dual_extract)/dO - sum(lambda_gen_extract{1}) - sum(lambda_gen_extract{2}));
 
-primal_fo = 1-min(p_fo);
-dual_fo = - (trace(W_fo_dual_extract)/dO - sum(lambda_fo_extract{1}) - sum(lambda_fo_extract{2}));
+eps_primal_fo = 1-min(p_succ_fo);
+eps_dual_fo = - (trace(W_fo_dual_extract)/dO - sum(lambda_fo_extract{1}) - sum(lambda_fo_extract{2}));
 
-bounds_gen = [dual_gen, primal_gen]
-bounds_fo = [dual_fo, primal_fo]
+eps_bounds_gen = [eps_dual_gen, eps_primal_gen]
+eps_bounds_fo = [eps_dual_fo, eps_primal_fo]
