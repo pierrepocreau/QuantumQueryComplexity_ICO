@@ -26,11 +26,13 @@ for i = 1:T
 end
 spaces{T+2}{1} =  2*T+2;
 spaces{T+2}{2} = [];
-%%
-Wproj_QCFO = project_onto_QCFOs(W - trace(W)/dim * eye(dim), d, spaces);
-constr_QCFO_dual = Wproj_QCFO == 0;
-Wproj_gen = project_onto_valid_superops(W - trace(W)/dim * eye(dim), d, spaces);
-constr_GEN_dual = Wproj_gen == 0;
+%% Building the constraints and objective
+Wproj_QCFO = project_onto_dual_QCFO_superops(W, d, spaces);
+constr_QCFO_dual = W == Wproj_QCFO;
+
+Wproj_gen = project_onto_dual_valid_superops(W, d, spaces);
+constr_GEN_dual = W == Wproj_gen;
+
 
 constr_lambda = [sum(lambda{1}) + sum(lambda{2}) <= 1, lambda{1} >= 0, lambda{2} >= 0];
 
@@ -61,6 +63,7 @@ constr_QCFO_dual = [constr_QCFO_dual, constr_lambda, constr1, constr0];
 % Dual objective
 obj = 1 + trace(W)/dim_H^T - sum(lambda{1}) - sum(lambda{2}); 
 
+%%
 % Optimisation
 optout_gen = optimize(constr_GEN_dual, obj, settings);
 W_gen_dual = value(W);
