@@ -63,8 +63,7 @@ constr_QCFO_dual = [constr_QCFO_dual, constr_lambda, constr1, constr0];
 % Dual objective
 obj = 1 + trace(W)/dim_H^T - sum(lambda{1}) - sum(lambda{2}); 
 
-%%
-% Optimisation
+%% Optimisation
 optout_gen = optimize(constr_GEN_dual, obj, settings);
 W_gen_dual = value(W);
 lambda_gen{1} = value(lambda{1});
