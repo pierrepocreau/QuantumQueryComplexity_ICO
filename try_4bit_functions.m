@@ -32,7 +32,12 @@ for tt = bin_rep'
     
     % Specifying the scenario: dimensions, and which space belongs to which operation
     d = dim_H * ones(1,2*T);
-    spaces = {{[]}, {1, 2}, {3, 4}, {[],}};
+    spaces{1}{1} = [];
+    for i = 1:T
+        spaces{i+1}{1} = 2*i - 1;
+        spaces{i+1}{2} = 2*i;
+    end
+    spaces{T+2}{1} = [];
 
     % Constraints for the two types of supermaps
     constr_FO = is_QCFO(W,d,spaces);
