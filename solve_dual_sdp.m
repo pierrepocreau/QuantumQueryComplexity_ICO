@@ -6,7 +6,7 @@ n = 4; % Number of bits of the Boolean function considered
 dim_H = n + 1; % The oracles take a register of dimension 5
 T = 2;
 % Yalmip settings
-settings = sdpsettings('solver','scs','scs.eps',1e-6,'scs.eps_abs',1e-6,'scs.eps_rel', 0, 'scs.max_iters',50000,'dimacs',1);
+settings = sdpsettings('solver','scs','scs.eps_abs',1e-6,'scs.eps_rel', 0, 'scs.max_iters',50000,'dimacs',1);
 % settings = sdpsettings('solver','mosek','dimacs',1);
 
 f = boolean_function_from_table([0 0 0 1 0 1 1 0 1 1 1 0 1 0 0 1]); % Loads the function
@@ -78,4 +78,4 @@ lambda_FO{2} = value(lambda{2});
 % Extract the value of epsilon from the objective (1 - epsilon)
 eps_FO = - (trace(value(W_FO_dual))/dim_H^T - sum(lambda_FO{1}) - sum(lambda_FO{2}));
 
-[eps_FO, eps_GEN]
+[eps_GEN, eps_FO]

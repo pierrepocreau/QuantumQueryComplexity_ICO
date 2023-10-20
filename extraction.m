@@ -40,15 +40,15 @@ end
 
 % Extraction of exact solution of the dual for general supermaps and FO-supermaps
 % This gives an upper bound on the objective function 1-epsilon, and hence a lower bound on epsilon
-[W_Gen_dual_extract, lambda_Gen_extract] = extract_dual(W_gen_dual, lambda_gen, n, func, T, 5, symbolic); % Supermap class 5 is general supermaps
-[W_FO_dual_extract, lambda_FO_extract] = extract_dual(W_fo_dual, lambda_fo, n, func, T, 2, symbolic); % Supermap class 2 is FO-supermaps
+[W_Gen_dual_extracted, lambda_Gen_extracted] = extract_dual(W_gen_dual, lambda_gen, n, func, T, 5, symbolic); % Supermap class 5 is general supermaps
+[W_FO_dual_extracted, lambda_FO_extracted] = extract_dual(W_fo_dual, lambda_fo, n, func, T, 2, symbolic); % Supermap class 2 is FO-supermaps
 
 % Compute the values of the two bounds on epsilon
 eps_primal_Gen = 1-min(p_succ_Gen);
-eps_dual_Gen = - (trace(W_Gen_dual_extract)/dO - sum(lambda_Gen_extract{1}) - sum(lambda_Gen_extract{2}));
+eps_dual_Gen = - (trace(W_Gen_dual_extracted)/dO - sum(lambda_Gen_extracted{1}) - sum(lambda_Gen_extracted{2}));
 
 eps_primal_FO = 1-min(p_succ_FO);
-eps_dual_FO = - (trace(W_FO_dual_extract)/dO - sum(lambda_FO_extract{1}) - sum(lambda_FO_extract{2}));
+eps_dual_FO = - (trace(W_FO_dual_extracted)/dO - sum(lambda_FO_extracted{1}) - sum(lambda_FO_extracted{2}));
 
 eps_bounds_Gen = [eps_dual_Gen, eps_primal_Gen]
 eps_bounds_FO = [eps_dual_FO, eps_primal_FO]
