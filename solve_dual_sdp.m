@@ -32,7 +32,7 @@ Wproj_QCFO = project_onto_affine_dual_QCFOs(W, d, spaces);
 constr_QCFO_dual = [W == Wproj_QCFO];
 
 Wproj_gen = project_onto_affine_dual_superops(W, d, spaces);
-constr_GEN_dual = [W == Wproj_gen];
+constr_Gen_dual = [W == Wproj_gen];
 
 constr_lambda = [sum(lambda{1}) + sum(lambda{2}) <= 1, lambda{1} >= 0, lambda{2} >= 0];
 
@@ -57,19 +57,19 @@ end
 constr0 =  [W - operator0] >= 0;
 constr1 =  [W - operator1] >= 0;
 
-constr_GEN_dual = [constr_GEN_dual, constr_lambda, constr0, constr1];
+constr_Gen_dual = [constr_Gen_dual, constr_lambda, constr0, constr1];
 constr_QCFO_dual = [constr_QCFO_dual, constr_lambda, constr0, constr1];
 
 % Dual objective
 obj = 1 + trace(W)/dim_H^T - sum(lambda{1}) - sum(lambda{2}); 
 
 %% Optimisation
-optout_GEN = optimize(constr_GEN_dual, obj, settings);
-W_GEN_dual = value(W);
-lambda_GEN{1} = value(lambda{1});
-lambda_GEN{2} = value(lambda{2});
+optout_Gen = optimize(constr_Gen_dual, obj, settings);
+W_Gen_dual = value(W);
+lambda_Gen{1} = value(lambda{1});
+lambda_Gen{2} = value(lambda{2});
 % Extract the value of epsilon from the objective (1 - epsilon)
-eps_GEN = - (trace(value(W_GEN_dual))/dim_H^T - sum(lambda_GEN{1}) - sum(lambda_GEN{2}));
+eps_GEN = - (trace(value(W_Gen_dual))/dim_H^T - sum(lambda_Gen{1}) - sum(lambda_Gen{2}));
 
 optout_FO = optimize(constr_QCFO_dual, obj, settings);
 W_FO_dual = value(W);

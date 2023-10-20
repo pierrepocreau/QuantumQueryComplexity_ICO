@@ -46,8 +46,10 @@ constr_GEN = [constr_GEN, constr];
 % Optimisation
 optout_GEN = optimize(constr_GEN, -(1-epsilon), settings); % The optimisation is by default a minimisation.
 eps_GEN = value(epsilon); 
+W_Gen = {value(W{1}), value(W{2})};
 
 optout_FO = optimize(constr_FO, -(1-epsilon), settings);
 eps_FO = value(epsilon);
+W_FO = {value(W{1}), value(W{2})};
 
 [eps_GEN, eps_FO]
