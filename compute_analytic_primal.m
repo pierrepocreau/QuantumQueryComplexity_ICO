@@ -44,13 +44,13 @@ constr_FO = [constr_QCFO, constr];
 constr_GEN = [constr_GEN, constr];
 
 % Optimisation
-optout_gen = optimize(constr_GEN, -(1-epsilon), settings); % The optimisation is by default a minimisation.
-eps_Gen = value(epsilon); 
+optout_GEN = optimize(constr_GEN, -(1-epsilon), settings); % The optimisation is by default a minimisation.
+eps_GEN = value(epsilon); 
 
-optout_fo = optimize(constr_FO, -(1-epsilon), settings);
+optout_FO = optimize(constr_FO, -(1-epsilon), settings);
 eps_FO = value(epsilon);
 
-[eps_FO, eps_Gen]
+[eps_FO, eps_GEN]
 
 
 

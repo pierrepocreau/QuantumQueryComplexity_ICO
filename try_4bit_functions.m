@@ -12,7 +12,9 @@ n = 4; % Number of bits
 dim_H = n + 1; % For 4-bits, the oracles have dimension 5.
 T = 2; % Number of queries
 
-settings = sdpsettings('solver','scs','scs.eps_abs',1e-6,'scs.eps_rel', 0, 'scs.max_iters',50000,'dimacs',1);
+% Yalmip settings
+settings = sdpsettings('solver','scs','scs.eps',1e-6,'scs.eps_abs',1e-6,'scs.eps_rel', 0, 'scs.max_iters',50000,'dimacs',1);
+% settings = sdpsettings('solver','mosek','dimacs',1);
 
 % Truth tables for all the functions
 bin_rep = dec2bin(representative_n4) - '0';

@@ -1,5 +1,5 @@
 function handle = boolean_function_from_table(tt)
-    % Return the function define by the truth table tt.
+    % Return the function defined by the truth table tt.
     handle = @(x) eval(tt, x);
 end
 

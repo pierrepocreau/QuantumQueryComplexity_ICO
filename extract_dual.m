@@ -8,6 +8,7 @@ function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapC
     
     d = dim_H * ones(1,2*T);
     dim = prod(d);
+    
     spaces{1}{1} = []; % trivial P
     for i = 1:T
         spaces{i+1}{1} = 2*i - 1;
@@ -80,9 +81,9 @@ function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapC
     % Project S onto the dual cone
     switch supermapClass
         case 2 % QC-FO
-            S_valid = project_onto_dual_QCFO_superops(S_Herm, d, spaces);
+            S_valid = project_onto_affine_dual_QCFOs(S_Herm, d, spaces);
         otherwise % General supermaps
-            S_valid = project_onto_dual_valid_superops(S_Herm, d, spaces);
+            S_valid = project_onto_affine_dual_superops(S_Herm, d, spaces);
     end
     
     % Compute the expressions of the operator0 and operator1 (O^{[0]} and O^{[1}}) in the paper
@@ -153,9 +154,9 @@ function [S_final,lambdas_frac] = extract_dual(S, lambdas, n, func, T, supermapC
     assert(all([lambdas_final{1}; lambdas_final{2}] >= 0)); % All lambdas non-negative
     switch supermapClass
         case 2 % FO-supermaps
-            assert(0 == max(max(abs(S_final - project_onto_dual_QCFO_superops(S_final, d, spaces)))))
+            assert(0 == max(max(abs(S_final - project_onto_affine_dual_QCFOs(S_final, d, spaces)))))
         otherwise % General supermaps
-            assert(0 == max(max(abs(S_final - project_onto_dual_valid_superops(S_final, d, spaces)))))
+            assert(0 == max(max(abs(S_final - project_onto_affine_dual_QCFOs(S_final, d, spaces)))))
     end
 end
 

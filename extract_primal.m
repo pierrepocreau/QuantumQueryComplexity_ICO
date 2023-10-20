@@ -7,17 +7,14 @@ function W_final = extract_primal(W, T, n, supermapClass, symbolic)
     dim_H = n+1;
 
     d = dim_H * ones(1,2*T);
-    d = [1 d 1]; % Trivial input and output spaces
     dim = prod(d);
 
-    spaces{1}{1} = [];    
-    spaces{1}{1} = 1;
+    spaces{1}{1} = []; % trivial P
     for i = 1:T
-        spaces{i+1}{1} = 2*i;
-        spaces{i+1}{2} = 2*i + 1;
+        spaces{i+1}{1} = 2*i - 1;
+        spaces{i+1}{2} = 2*i;
     end
-    spaces{T+2}{1} =  2*T+2;
-    spaces{T+2}{2} = [];
+    spaces{T+2}{1} =  []; % trivial F
     
     % Rationalise each element of the superinstrument W
     [N, D] = rat(W{1});
@@ -43,12 +40,12 @@ function W_final = extract_primal(W, T, n, supermapClass, symbolic)
             W_proj = project_onto_valid_superops(W_Herm{1} + W_Herm{2}, d, spaces);
     end
     
-    % Ensure that W is in the valid space of supermaps by removing the orthogonal part 
+    % Ensure that W is in the space of valid supermaps by removing the orthogonal part 
     W_corr = W_proj - W_Herm{1} - W_Herm{2};
     W_valid{1} = W_Herm{1} + W_corr / 2;
     W_valid{2} = W_Herm{2} + W_corr / 2;
     
-    % Ensure that the superinstrument elements are positive semi-definite
+    % Ensure that the superinstrument elements are positive semidefinite
     % by mixing them with the identity.
     % This step can be performed analytically, however computing the
     % eigenvalues in symbolic mode is computationally inefficient.
