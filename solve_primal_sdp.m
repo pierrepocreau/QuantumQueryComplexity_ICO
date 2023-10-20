@@ -26,8 +26,8 @@ for i = 1:T
 end
 spaces{T+2}{1} = [];
 
-constr_QCFO = is_QCFO(W,d, spaces);
-constr_GEN = is_valid_superop(W,d, spaces);
+constr_FO = is_QCFO(W,d, spaces);
+constr_Gen = is_valid_superop(W,d, spaces);
 
 % Generate the constraints that all x must be computed with an error
 % smaller than epsilon.
@@ -40,11 +40,11 @@ for x = dec2bin(0:2^n-1)' - '0'
     Ox = oracles(num2str(x'));
     constr = [constr, trace(W{im+1}*transpose(Ox)) >= 1 - epsilon];
 end
-constr_FO = [constr_QCFO, constr];
-constr_GEN = [constr_GEN, constr];
+constr_FO = [constr_FO, constr];
+constr_Gen = [constr_Gen, constr];
 
 % Optimisation
-optout_GEN = optimize(constr_GEN, -(1-epsilon), settings); % The optimisation is by default a minimisation.
+optout_GEN = optimize(constr_Gen, -(1-epsilon), settings); % The optimisation is by default a minimisation.
 eps_GEN = value(epsilon); 
 W_Gen = {value(W{1}), value(W{2})};
 
