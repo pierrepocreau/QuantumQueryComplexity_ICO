@@ -4,7 +4,7 @@ arXiv:2307.10285
 The Matlab project requires:
 - [CVX](https://github.com/cvxr/CVX): a Matlab package for convex optimizaton. 
 - [QETLab](https://qetlab.com/Main_Page): a Matlab toolbox for exploring quantum entanglement theory.
-- [qsuperop](https://github.com/alastair-abbott/qsuperops): a Matlab package to work with quantum superoperators and their causal structure.
+- [qsuperops](https://github.com/alastair-abbott/qsuperops): a Matlab package to work with quantum superoperators and their causal structure.
 - [Matlab Symbolic Math Toolbox](https://www.mathworks.com/products/symbolic.html): for exact symbolic manipulation of the primal/dual SDP solutions
 
 Scripts of the Matlab project:
