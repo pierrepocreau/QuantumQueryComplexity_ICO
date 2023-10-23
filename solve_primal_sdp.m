@@ -13,6 +13,7 @@ f = boolean_function_from_table([0 0 0 1 0 1 1 0 1 1 1 0 1 0 0 1]); % Loads the 
 
 % Generate the process matrix variables. Can assume this is real since the oracles are real.
 dim = dim_H^(2*T);
+W = cell(1,2);
 W{1} = sdpvar(dim,dim,'symmetric');
 W{2} = sdpvar(dim,dim,'symmetric');
 
